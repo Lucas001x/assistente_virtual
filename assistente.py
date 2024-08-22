@@ -30,7 +30,8 @@ def monitora_audio():
 				mensagem = recon.recognize_google(audio, language = 'pt-br')
 				mensagem = mensagem.lower()
 				print('Você disse', mensagem)
-				executa_comandos(mensagem)
+				if "jarvis" in mensagem:
+					executa_comandos(mensagem)
 				break
 			except sr.UnknownValueError:
 				pass

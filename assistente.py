@@ -3,7 +3,6 @@ import sys
 import speech_recognition as sr 
 import webbrowser as browser
 import urllib.request, json, requests
-import translateimport urllib.request, json, requests
 import translate
 from gtts import gTTS
 from playsound import playsound
@@ -11,11 +10,14 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from requests import get
 from translate import Translator
+import time
 
 def cria_audio(audio, mensagem, lang = 'pt-br'):
 	tts = gTTS(mensagem, lang = lang)
 	tts.save(audio)
+	time.sleep(1)
 	playsound(audio)
+	time.sleep(0.02)
 	os.remove(audio)	
 
 def monitora_audio():
@@ -67,13 +69,13 @@ def clima(cidade):
 	response = requests.get(complete_url)
 	retorno = response.json()
 	if retorno["cod"] == 200:
-	    valor = retorno["main"]
-	    current_temperature = valor["temp"]
-	    current_humidiy = valor["humidity"]
-	    tempo = retorno["weather"]
-	    weather_description = tempo[0]["description"]
-	    clima = (f"Em {cidade} a temperatura é de {str(int(current_temperature - 273.15))} graus celcius e humidade de {str(current_humidiy)} %")
-	    cria_audio("clima.mp3", clima)
+		valor = retorno["main"]
+		current_temperature = valor["temp"]
+		current_humidiy = valor["humidity"]
+		tempo = retorno["weather"]
+		weather_description = tempo[0]["description"]
+		clima = (f"Em {cidade} a temperatura é de {str(int(current_temperature - 273.15))} graus celcius e humidade de {str(current_humidiy)} %")
+		cria_audio("clima.mp3", clima)
 	else:
 		cria_audio("erro.mp3", "Infelizmente não entendi, pode repetir por favor?")
 
@@ -168,13 +170,13 @@ def executa_comandos(mensagem):
 
 	# abrir programas do computador
 	elif 'abrir' in mensagem and 'google chrome' in mensagem:
-		os.startfile("<caminho para google chrome na sua máquina>")
+		os.startfile("")
 	elif 'abrir' in mensagem and 'visual studio' in mensagem:
-		os.startfile("<caminho para visual studio na sua máquina>")
+		os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
 	elif 'abrir' in mensagem and 'visual studio code' in mensagem:
-		os.startfile("<caminho para visual studio code na sua máquina>")
-	elif 'abrir' in mensagem and 'discord' in mensagem:
-		os.startfile("<caminho para discord na sua máquina>")
+		os.startfile("")
+	elif 'abrir' in mensagem and 'terminal' in mensagem:
+		os.startfile("C:\WINDOWS\system32\cmd.exe")
 	elif 'abrir' in mensagem and 'notion' in mensagem:
 		os.startfile("<caminho para notion na sua máquina>")
 
@@ -191,9 +193,12 @@ def executa_comandos(mensagem):
 		os.system(f'c: && cd C:/Program Files/Conceptworld/Notezilla && Notezilla.exe /CreateNewNote "{lembrete}"')
 	elif 'mostrar' in mensagem and 'lembrete' in mensagem:
 		os.system('c: && cd C:/Program Files/Conceptworld/Notezilla && Notezilla.exe /BringNotesOnTop')
+	
+	elif 'fale' in mensagem:
+		cria_audio("mensagem.mp3", mensagem)
 
 def main():
-	cria_audio("ola.mp3", "Olá sou a Ana, sua assistente virtual! Como posso ajudar?")
+	cria_audio("hello.mp3", "Olá sou seu assistente virtual! Como posso ajudar?")
 	while True:
 		monitora_audio()
 
